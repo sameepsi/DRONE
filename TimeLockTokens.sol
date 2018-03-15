@@ -144,7 +144,7 @@ contract TokenTimelock is Ownable {
     
     assert(amount > 0);
     
-    released[msg.sender].add(amount);
+    released[msg.sender] = released[msg.sender].add(amount);
     
     token.transfer(msg.sender, amount);
   }
@@ -172,7 +172,7 @@ contract TokenTimelock is Ownable {
    * @param _beneficiary The address of beneficiary to be removed
    * 
    */
-  function revokeBeneficiary(address _beneficiary)onlyOwner public {
+  function revokeBeneficiary(address _beneficiary) onlyOwner public {
         
         require(_beneficiary != 0x0);
         require(validBeneficiary(_beneficiary));
@@ -216,7 +216,7 @@ contract TokenTimelock is Ownable {
       
       uint256 tokensReleasedToAddress = released[_beneficiary];
       
-      assert(tokensVestedForAddress.sub(tokensReleasedToAddress)>=currentBalance);
+      assert(tokensVestedForAddress.sub(tokensReleasedToAddress)<=currentBalance);
       
       return tokensVestedForAddress.sub(tokensReleasedToAddress);
       
