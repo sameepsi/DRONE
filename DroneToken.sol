@@ -205,20 +205,57 @@ contract StandardToken is ERC20, BasicToken {
  */
 contract BurnableToken is StandardToken, Ownable {
 
+    //this will contain a list of addresses allowed to burn their tokens
+    mapping(address=>bool)allowedBurners;
+    
     event Burn(address indexed burner, uint256 value);
-
+    
+    event BurnerAdded(address indexed burner);
+    
+    event BurnerRemoved(address indexed burner);
+    
+    //check whether the burner is eligible burner
+    modifier isBurner(address _burner){
+        require(allowedBurners[_burner]);
+        _;
+    }
+    
     /**
-     * @dev Burns a specific amount of tokens.
-     * @param _value The amount of token to be burned.
+    *@dev Method to add eligible addresses in the list of burners. Since we need to burn all tokens left with the sales contract after the sale has ended. The sales contract should
+    * be an eligible burner. The owner has to add the sales address in the eligible burner list.
+    * @param _burner Address of the eligible burner
+    */
+    function addEligibleBurner(address _burner)public onlyOwner {
+        
+        require(_burner != 0x0);
+        allowedBurners[_burner] = true;
+        emit BurnerAdded(_burner);
+    }
+    
+     /**
+    *@dev Method to remove addresses from the list of burners
+    * @param _burner Address of the eligible burner to be removed
+    */
+    function removeEligibleBurner(address _burner)public onlyOwner isBurner(_burner) {
+        
+        allowedBurners[_burner] = false;
+        emit BurnerRemoved(_burner);
+    }
+    
+    /**
+     * @dev Burns all tokens of the eligible burner
      */
-    function burn(uint256 _value) public onlyOwner{
-        require(_value <= balances[msg.sender]);
-        // no need to require value <= totalSupply, since that would imply the
-        // sender's balance is greater than the totalSupply, which *should* be an assertion failure
+    function burnAllTokens() public isBurner(msg.sender) {
+        
+        require(balances[msg.sender]>0);
+        
+        uint256 value = balances[msg.sender];
+        
+        totalSupply = totalSupply.sub(value);
 
-        balances[msg.sender] = balances[msg.sender].sub(_value);
-        totalSupply = totalSupply.sub(_value);
-        emit Burn(msg.sender, _value);
+        balances[msg.sender] = 0;
+        
+        emit Burn(msg.sender, value);
     }
 }
 /**
