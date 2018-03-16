@@ -183,7 +183,7 @@ contract DroneTokenSale is Ownable{
       uint256 public totalFunding;
       
       //total tokesn available for sale
-      uint256 tokensAvailableForSale = 25000000000;
+      uint256 tokensAvailableForSale = 2500000000;
       
       
       uint8 public noOfPhases;
