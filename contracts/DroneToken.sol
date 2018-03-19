@@ -1,4 +1,4 @@
-pragma solidity 0.4.21;
+pragma solidity 0.4.19;
 
 
 /**
@@ -67,7 +67,7 @@ contract Ownable {
    */
   function transferOwnership(address newOwner) public onlyOwner {
     require(newOwner != address(0));
-    emit OwnershipTransferred(owner, newOwner);
+    OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
 
@@ -125,7 +125,7 @@ contract BasicToken is ERC20Basic {
     // SafeMath.sub will throw if there is not enough balance.
     balances[msg.sender] = balances[msg.sender].sub(_amount);
     balances[_to] = balances[_to].add(_amount);
-    emit Transfer(msg.sender, _to, _amount);
+    Transfer(msg.sender, _to, _amount);
     return true;
   }
 
@@ -167,7 +167,7 @@ contract StandardToken is ERC20, BasicToken {
     balances[_from] = balances[_from].sub(_amount);
     balances[_to] = balances[_to].add(_amount);
     allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
-    emit Transfer(_from, _to, _amount);
+    Transfer(_from, _to, _amount);
     return true;
   }
 
@@ -183,7 +183,7 @@ contract StandardToken is ERC20, BasicToken {
    */
   function approve(address _spender, uint256 _amount) public returns (bool success) {
     allowed[msg.sender][_spender] = _amount;
-    emit Approval(msg.sender, _spender, _amount);
+    Approval(msg.sender, _spender, _amount);
     return true;
   }
 
@@ -229,7 +229,7 @@ contract BurnableToken is StandardToken, Ownable {
         
         require(_burner != 0x0);
         allowedBurners[_burner] = true;
-        emit BurnerAdded(_burner);
+        BurnerAdded(_burner);
     }
     
      /**
@@ -239,7 +239,7 @@ contract BurnableToken is StandardToken, Ownable {
     function removeEligibleBurner(address _burner)public onlyOwner isBurner(_burner) {
         
         allowedBurners[_burner] = false;
-        emit BurnerRemoved(_burner);
+        BurnerRemoved(_burner);
     }
     
     /**
@@ -255,7 +255,7 @@ contract BurnableToken is StandardToken, Ownable {
 
         balances[msg.sender] = 0;
         
-        emit Burn(msg.sender, value);
+        Burn(msg.sender, value);
     }
 }
 /**
@@ -291,7 +291,7 @@ contract BurnableToken is StandardToken, Ownable {
          balances[msg.sender] = totalSupply;
          
          //Emitting transfer event since assigning all tokens to the creator also corresponds to the transfer of tokens to the creator
-         emit Transfer(address(0), msg.sender, totalSupply);
+         Transfer(address(0), msg.sender, totalSupply);
      }
      
      /**
