@@ -117,7 +117,7 @@ contract TokenTimelock is Ownable {
   function TokenTimelock(address _token, address[] _beneficiaries, uint256[]_tokensVested, uint256 _releaseTime) public {
       
     require(_releaseTime > now);
-    require(_token != 0x0);
+    require(_token != address(0));
     require(_beneficiaries.length == _tokensVested.length);
     
     token = Token(_token);
@@ -155,7 +155,7 @@ contract TokenTimelock is Ownable {
   */
   function validBeneficiary(address _beneficiary)public view returns (bool) {
       
-      require(_beneficiary != 0x0);
+      require(_beneficiary != address(0));
       
       for(uint8 i=0;i<beneficiaries.length;i++){
           if(beneficiaries[i] == _beneficiary){
@@ -174,7 +174,7 @@ contract TokenTimelock is Ownable {
    */
   function revokeBeneficiary(address _beneficiary) onlyOwner public {
         
-        require(_beneficiary != 0x0);
+        require(_beneficiary != address(0));
         require(validBeneficiary(_beneficiary));
         
         uint256 tokensVestedForAddress = tokensVested[_beneficiary];
@@ -206,7 +206,7 @@ contract TokenTimelock is Ownable {
   
   function releasableAmount(address _beneficiary)public view returns(uint256) {
       
-      require(_beneficiary != 0x0);
+      require(_beneficiary != address(0));
 
       require(now >= releaseTime);
 

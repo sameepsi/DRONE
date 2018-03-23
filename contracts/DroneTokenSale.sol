@@ -101,11 +101,11 @@ contract Vault is Ownable {
 
     event Withdraw();
     event RefundsEnabled();
-    event withdrawn(address _wallet);
+    event Withdrawn(address _wallet);
     event Refunded(address indexed beneficiary, uint256 weiAmount);
       
     function Vault(address _wallet) public {
-        require(_wallet != 0x0);
+        require(_wallet != address(0));
         wallet = _wallet;
         state = State.Active;
     }
@@ -133,7 +133,7 @@ contract Vault is Ownable {
     function withdrawToWallet() onlyOwner public{
     require(state == State.Withdraw);
     wallet.transfer(this.balance);
-     withdrawn(wallet);
+     Withdrawn(wallet);
   }
   
    function refund(address investor) public {
@@ -217,7 +217,7 @@ contract DroneTokenSale is Ownable{
     }
   
      modifier nonZeroAddress(address _to) {
-        require(_to != 0x0);
+        require(_to != address(0));
         _;
     }
     
@@ -454,7 +454,9 @@ contract DroneTokenSale is Ownable{
        
        token.transfer(beneficiary, bonusedTokens);
        
-     TokenPurchase(msg.sender, beneficiary, weiAmount, bonusedTokens);
+       TokenPurchase(msg.sender, beneficiary, weiAmount, bonusedTokens);
+
+       return true;
        
    }
    

@@ -227,7 +227,7 @@ contract BurnableToken is StandardToken, Ownable {
     */
     function addEligibleBurner(address _burner)public onlyOwner {
         
-        require(_burner != 0x0);
+        require(_burner != address(0));
         allowedBurners[_burner] = true;
         BurnerAdded(_burner);
     }
