@@ -183,7 +183,7 @@ contract DroneTokenSale is Ownable{
       uint256 public totalFunding;
       
       //total tokesn available for sale
-      uint256 tokensAvailableForSale = 2500000000;
+      uint256 tokensAvailableForSale = 3000000000;
       
       
       uint8 public noOfPhases;
@@ -379,7 +379,7 @@ contract DroneTokenSale is Ownable{
         
         //pre-sales
         startTimes[0] = 1522407660; //MARCH 30, 2018 11:01 AM GMT
-        endTimes[0] = 1525086000; //APRIL 30, 2018 11:00 AM GMT
+        endTimes[0] = 1523790000; //APRIL 15, 2018 11:00 AM GMT
         hardCaps[0] = 10000 ether;
         bonusPercentages[0][0] = 35;
         bonusPercentages[0][1] = 30;
