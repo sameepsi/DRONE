@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity 0.4.21;
 
 
 /**
@@ -72,7 +72,7 @@ contract Ownable {
    */
   function transferOwnership(address newOwner) public onlyOwner {
     require(newOwner != address(0));
-     OwnershipTransferred(owner, newOwner);
+    emit OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
 
@@ -120,20 +120,20 @@ contract Vault is Ownable {
     function activateWithdrawal() public onlyOwner {
         if(state == State.Active){
           state = State.Withdraw;
-           Withdraw();
+          emit Withdraw();
         }
     }
     
     function activateRefund()public onlyOwner {
         require(state == State.Active);
         state = State.Refunding;
-         RefundsEnabled();
+        emit RefundsEnabled();
     }
     
     function withdrawToWallet() onlyOwner public{
     require(state == State.Withdraw);
     wallet.transfer(this.balance);
-     withdrawn(wallet);
+    emit withdrawn(wallet);
   }
   
    function refund(address investor) public {
@@ -141,7 +141,7 @@ contract Vault is Ownable {
     uint256 depositedValue = deposited[investor];
     deposited[investor] = 0;
     investor.transfer(depositedValue);
-    Refunded(investor, depositedValue);
+    emit Refunded(investor, depositedValue);
   }
   
  function isRefunding()public onlyOwner view returns(bool) {
@@ -265,7 +265,7 @@ contract DroneTokenSale is Ownable{
             vault.activateWithdrawal();
         }
         
-      SaleStopped(msg.sender, now);
+      emit SaleStopped(msg.sender, now);
     }
     
     /**
@@ -284,7 +284,7 @@ contract DroneTokenSale is Ownable{
             vault.activateWithdrawal();
         }
        
-        Finalized(msg.sender, now);
+       emit Finalized(msg.sender, now);
     }
     
       // @return true if all the tiers has been ended
@@ -454,7 +454,7 @@ contract DroneTokenSale is Ownable{
        
        token.transfer(beneficiary, bonusedTokens);
        
-     TokenPurchase(msg.sender, beneficiary, weiAmount, bonusedTokens);
+       emit TokenPurchase(msg.sender, beneficiary, weiAmount, bonusedTokens);
        
    }
    
