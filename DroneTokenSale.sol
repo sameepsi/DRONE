@@ -222,7 +222,7 @@ contract DroneTokenSale is Ownable{
     }
     
     modifier minEthContribution() {
-        require(msg.value > 0.1 ether);
+        require(msg.value >= 0.1 ether);
         _;
     }
     
@@ -378,7 +378,7 @@ contract DroneTokenSale is Ownable{
         uint8[3] [4] memory bonusPercentages;
         
         //pre-sales
-        startTimes[0] = 1522407660; //MARCH 30, 2018 11:01 AM GMT
+        startTimes[0] = 1522321200; //MARCH 29, 2018 11:00 AM GMT
         endTimes[0] = 1523790000; //APRIL 15, 2018 11:00 AM GMT
         hardCaps[0] = 10000 ether;
         bonusPercentages[0][0] = 35;
